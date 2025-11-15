@@ -4,6 +4,7 @@ const STORAGE_KEYS = {
   MENU_ITEMS: 'sportsShop_menuItems',
   CART: 'sportsShop_cart',
   TRANSACTIONS: 'sportsShop_transactions',
+  QR_CODE: 'sportsShop_qrCode',
 };
 
 // Default menu items with images
@@ -142,3 +143,20 @@ export const getTransactionsByMonth = (year: number, month: number): Transaction
     return date.getFullYear() === year && date.getMonth() === month;
   });
 };
+
+// QR Code storage functions
+export const getQRCode = (): string => {
+  if (typeof window === 'undefined') return '';
+  const qrCode = localStorage.getItem(STORAGE_KEYS.QR_CODE);
+  return qrCode || '';
+};
+
+export const saveQRCode = (qrCode: string): void => {
+  if (typeof window === 'undefined') return;
+  if (qrCode) {
+    localStorage.setItem(STORAGE_KEYS.QR_CODE, qrCode);
+  } else {
+    localStorage.removeItem(STORAGE_KEYS.QR_CODE);
+  }
+};
+

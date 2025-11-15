@@ -17,11 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-modern bg-shapes">
         <ToastProvider>
           <CartProvider>
             <Navigation />
-            <main className="min-h-screen">{children}</main>
+            <main className="min-h-screen relative">{children}</main>
             <ToastsContainer />
           </CartProvider>
         </ToastProvider>
