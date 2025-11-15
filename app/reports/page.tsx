@@ -33,7 +33,7 @@ export default function ReportsPage() {
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-8 text-center">Monthly Sales Reports</h1>
 
       {/* Date Selection */}
-      <div className="bg-white rounded-xl shadow-professional-lg border border-gray-200 p-5 sm:p-6 mb-4 sm:mb-6">
+      <div className="bg-white rounded-2xl shadow-modern-lg border border-gray-200/50 p-5 sm:p-6 mb-4 sm:mb-6 animate-fade-in">
         <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-end">
           <div className="w-full sm:w-auto">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -42,7 +42,7 @@ export default function ReportsPage() {
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+              className="w-full sm:w-auto px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all duration-200 shadow-sm focus:shadow-modern"
             >
               {years.map(year => (
                 <option key={year} value={year}>{year}</option>
@@ -56,7 +56,7 @@ export default function ReportsPage() {
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(Number(e.target.value))}
-              className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+              className="w-full sm:w-auto px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all duration-200 shadow-sm focus:shadow-modern"
             >
               {months.map((month, index) => (
                 <option key={index} value={index}>{month}</option>
@@ -67,7 +67,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Current Month Report */}
-      <div className="bg-white rounded-xl shadow-professional-lg border border-gray-200 p-5 sm:p-6 mb-4 sm:mb-6">
+      <div className="bg-white rounded-2xl shadow-modern-lg border border-gray-200/50 p-5 sm:p-6 mb-4 sm:mb-6 animate-slide-up">
         <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">
           Report for {months[selectedMonth]} {selectedYear}
         </h2>

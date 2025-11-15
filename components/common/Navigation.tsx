@@ -29,17 +29,17 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className={`sticky top-0 z-50 bg-gradient-to-r from-blue-600 via-blue-700 to-blue-600 text-white shadow-professional-lg transition-all duration-300 ${scrolled ? 'shadow-2xl' : ''}`}>
+    <nav className={`sticky top-0 z-50 bg-gradient-to-r from-blue-600 via-blue-700 to-blue-600 text-white shadow-modern-lg transition-all duration-300 ${scrolled ? 'backdrop-blur-md bg-blue-600/95' : ''}`}>
       <div className="container mx-auto px-4 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           {/* Logo/Brand */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 group-hover:bg-white/30 transition-all duration-200">
+          <Link href="/" className="flex items-center gap-2 group hover-lift">
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 sm:p-2.5 group-hover:bg-white/30 transition-all duration-300 animate-scale-in">
               <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
             </div>
-            <span className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight">
+            <span className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
               Sports Shop
             </span>
           </Link>

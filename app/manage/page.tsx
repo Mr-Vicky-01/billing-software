@@ -8,8 +8,10 @@ import {
   updateMenuItem,
   deleteMenuItem,
 } from '@/lib/storage';
+import { useToast } from '@/context/ToastContext';
 
 export default function ManagePage() {
+  const { showToast } = useToast();
   const [items, setItems] = useState<MenuItem[]>([]);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [formData, setFormData] = useState({
@@ -34,13 +36,13 @@ export default function ManagePage() {
     e.preventDefault();
     
     if (!formData.name || !formData.price) {
-      alert('Name and price are required!');
+      showToast('Name and price are required!', 'error');
       return;
     }
 
     const price = parseFloat(formData.price);
     if (isNaN(price) || price <= 0) {
-      alert('Please enter a valid price!');
+      showToast('Please enter a valid price!', 'error');
       return;
     }
 
@@ -52,7 +54,7 @@ export default function ManagePage() {
         image: formData.image,
         description: formData.description || undefined,
       });
-      alert('Item updated successfully!');
+      showToast('Item updated successfully!', 'success');
     } else {
       // Create new item
       const newItem: MenuItem = {
@@ -63,7 +65,7 @@ export default function ManagePage() {
         description: formData.description || undefined,
       };
       addMenuItem(newItem);
-      alert('Item added successfully!');
+      showToast('Item added successfully!', 'success');
     }
 
     // Reset form
@@ -97,6 +99,7 @@ export default function ManagePage() {
         setEditingItem(null);
         setFormData({ name: '', price: '', image: '', description: '' });
       }
+      showToast('Item deleted successfully!', 'success');
       window.dispatchEvent(new Event('storage'));
     }
   };
@@ -145,7 +148,7 @@ export default function ManagePage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
         {/* Form Section */}
-        <div className="bg-white rounded-xl shadow-professional-lg border border-gray-200 p-5 sm:p-6">
+        <div className="bg-white rounded-2xl shadow-modern-lg border border-gray-200/50 p-5 sm:p-6 animate-fade-in">
           <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-5 text-gray-800">
             {editingItem ? 'Edit Item' : 'Add New Item'}
           </h2>
@@ -160,7 +163,7 @@ export default function ManagePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm focus:shadow-modern"
                 required
               />
             </div>
@@ -177,7 +180,7 @@ export default function ManagePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, price: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm focus:shadow-modern"
                 required
               />
             </div>

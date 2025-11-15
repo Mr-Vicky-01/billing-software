@@ -12,7 +12,7 @@ export default function CartItem({ cartItem }: CartItemProps) {
   const { item, quantity } = cartItem;
 
   return (
-    <div className="bg-white rounded-xl shadow-professional border border-gray-100 p-4 sm:p-5">
+    <div className="bg-white rounded-2xl shadow-modern border border-gray-100/50 p-4 sm:p-5 animate-slide-up">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
         <div className="w-full sm:w-20 h-40 sm:h-20 bg-gray-200 rounded flex-shrink-0">
           {item.image ? (
@@ -38,14 +38,14 @@ export default function CartItem({ cartItem }: CartItemProps) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => updateQuantity(item.id, quantity - 1)}
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-9 h-9 rounded-lg font-bold text-sm sm:text-base transition-colors shadow-sm"
+              className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-10 h-10 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 shadow-modern hover:shadow-modern-lg hover-lift"
             >
               −
             </button>
             <span className="w-12 sm:w-14 text-center font-semibold text-base sm:text-lg px-2">{quantity}</span>
             <button
               onClick={() => updateQuantity(item.id, quantity + 1)}
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-9 h-9 rounded-lg font-bold text-sm sm:text-base transition-colors shadow-sm"
+              className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-10 h-10 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 shadow-modern hover:shadow-modern-lg hover-lift"
             >
               +
             </button>
@@ -57,7 +57,7 @@ export default function CartItem({ cartItem }: CartItemProps) {
           </div>
           <button
             onClick={() => removeFromCart(item.id)}
-            className="bg-red-500 hover:bg-red-600 text-white px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium shadow-sm hover:shadow transition-all"
+            className="bg-red-500 hover:bg-red-600 text-white px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-modern hover:shadow-modern-lg transition-all duration-200 hover-lift"
           >
             Remove
           </button>

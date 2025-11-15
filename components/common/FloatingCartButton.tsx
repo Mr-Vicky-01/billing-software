@@ -15,9 +15,9 @@ export default function FloatingCartButton() {
   return (
     <Link
       href="/cart"
-      className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 no-print"
+      className="fixed bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-50 no-print"
     >
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full shadow-2xl px-6 py-4 flex items-center gap-4 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 animate-pulse-subtle">
+      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white rounded-2xl shadow-modern-lg px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-3 sm:gap-4 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 transition-all duration-300 hover-lift active:scale-95 border border-white/20 backdrop-blur-sm">
         <div className="relative">
           <svg
             className="w-7 h-7"

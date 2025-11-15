@@ -2,28 +2,29 @@
 
 import { useState } from 'react';
 import { useCart } from '@/context/CartContext';
+import { useToast } from '@/context/ToastContext';
 import CartItem from '@/components/Cart/CartItem';
 import CartSummary from '@/components/Cart/CartSummary';
 import BillPreview from '@/components/Bill/BillPreview';
 
 export default function CartPage() {
   const { cart, payNow, clearCart } = useCart();
+  const { showToast } = useToast();
   const [showPrintView, setShowPrintView] = useState(false);
 
   const handlePayNow = () => {
     if (cart.length === 0) {
-      alert('Your cart is empty!');
+      showToast('Your cart is empty!', 'warning');
       return;
     }
     if (confirm('Confirm payment?')) {
       payNow();
-      alert('Payment successful! Transaction saved.');
     }
   };
 
   const handlePrintBill = () => {
     if (cart.length === 0) {
-      alert('Your cart is empty!');
+      showToast('Your cart is empty!', 'warning');
       return;
     }
     setShowPrintView(true);

@@ -17,7 +17,7 @@ export default function MenuItem({ item }: MenuItemProps) {
   return (
     <div
       onClick={handleClick}
-      className="bg-white rounded-xl shadow-professional overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-professional-lg border border-gray-100"
+      className="bg-white rounded-2xl shadow-modern overflow-hidden cursor-pointer hover-lift border border-gray-100/50 animate-fade-in"
     >
       <div className="relative h-32 sm:h-40 md:h-48 bg-gray-200">
         {item.image ? (
@@ -51,7 +51,7 @@ export default function MenuItem({ item }: MenuItemProps) {
               e.stopPropagation();
               addToCart(item);
             }}
-            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg font-medium text-sm sm:text-base"
+            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-modern hover:shadow-modern-lg font-semibold text-sm sm:text-base hover-lift"
           >
             Add to Cart
           </button>

@@ -21,11 +21,11 @@ export default function CartSummary({
 
   if (cart.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-lg p-6 text-center">
+      <div className="bg-white rounded-2xl shadow-modern p-6 text-center animate-fade-in">
         <p className="text-gray-500 text-lg mb-4">Your cart is empty</p>
         <a
           href="/"
-          className="text-blue-600 hover:underline"
+          className="text-blue-600 hover:underline font-semibold transition-colors duration-200"
         >
           Continue Shopping
         </a>
@@ -34,7 +34,7 @@ export default function CartSummary({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-professional-lg border border-gray-200 p-5 sm:p-6 sticky top-4">
+    <div className="bg-white rounded-2xl shadow-modern-lg border border-gray-200/50 p-5 sm:p-6 sticky top-4 animate-slide-up">
       <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Bill Summary</h2>
       <div className="space-y-2 mb-4">
         <div className="flex justify-between text-gray-600 text-sm sm:text-base">
@@ -52,22 +52,22 @@ export default function CartSummary({
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-2 sm:gap-3 mt-4 sm:mt-6">
+      <div className="flex flex-col gap-3 sm:gap-4 mt-4 sm:mt-6">
         <button
           onClick={onPayNow}
-          className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 sm:py-3.5 px-5 sm:px-6 rounded-lg transition-all duration-200 text-sm sm:text-base shadow-md hover:shadow-lg"
+          className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3.5 sm:py-4 px-6 sm:px-7 rounded-xl transition-all duration-300 text-sm sm:text-base shadow-modern hover:shadow-modern-lg hover-lift"
         >
           Pay Now
         </button>
         <button
           onClick={onPrintBill}
-          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 sm:py-3.5 px-5 sm:px-6 rounded-lg transition-all duration-200 text-sm sm:text-base shadow-md hover:shadow-lg"
+          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3.5 sm:py-4 px-6 sm:px-7 rounded-xl transition-all duration-300 text-sm sm:text-base shadow-modern hover:shadow-modern-lg hover-lift"
         >
           Print Bill
         </button>
         <button
           onClick={onClearCart}
-          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold py-3 sm:py-3.5 px-5 sm:px-6 rounded-lg transition-all duration-200 text-sm sm:text-base shadow-md hover:shadow-lg"
+          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold py-3.5 sm:py-4 px-6 sm:px-7 rounded-xl transition-all duration-300 text-sm sm:text-base shadow-modern hover:shadow-modern-lg hover-lift"
         >
           Clear Cart
         </button>
