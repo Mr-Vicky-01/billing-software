@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
@@ -15,10 +16,12 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', className = '' }) => {
   const sizeClass = sizeMap[size];
 
   return (
-    <img
+    <Image
       src="/logo.png"
       alt="Sports Shop Logo"
-      className={`${sizeClass} object-contain ${className}`}
+      width={size === 'lg' ? 64 : size === 'md' ? 48 : 32}
+      height={size === 'lg' ? 64 : size === 'md' ? 48 : 32}
+      className={`${className} object-contain`}
     />
   );
 };export const LogoWithText: React.FC<LogoProps> = ({ size = 'md' }) => {

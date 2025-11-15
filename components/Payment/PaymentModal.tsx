@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { getQRCode, saveQRCode } from '@/lib/storage';
 
 interface PaymentModalProps {
@@ -92,11 +93,14 @@ export default function PaymentModal({
         <div className="bg-gray-50 rounded-xl p-6 mb-6 border-2 border-dashed border-gray-300">
           {qrImage ? (
             <div className="flex flex-col items-center">
-              <img
-                src={qrImage}
-                alt="Payment QR Code"
-                className="w-48 h-48 object-contain mb-4 rounded-lg border-2 border-blue-200"
-              />
+              <div className="relative w-48 h-48 mb-4 rounded-lg border-2 border-blue-200">
+                <Image
+                  src={qrImage}
+                  alt="Payment QR Code"
+                  fill
+                  className="object-contain"
+                />
+              </div>
               <p className="text-sm text-gray-600 text-center mb-4">
                 Ask customer to scan this QR code to complete payment
               </p>

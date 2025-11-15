@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { MenuItem as MenuItemType } from '@/lib/types';
 import { useCart } from '@/context/CartContext';
 
@@ -21,10 +22,11 @@ export default function MenuItem({ item }: MenuItemProps) {
     >
       <div className="relative h-40 sm:h-48 md:h-56 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden">
         {item.image ? (
-          <img
+          <Image
             src={item.image}
             alt={item.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            fill
+            className="object-cover group-hover:scale-110 transition-transform duration-300"
             onError={(e) => {
               (e.target as HTMLImageElement).src = '/placeholder.png';
             }}

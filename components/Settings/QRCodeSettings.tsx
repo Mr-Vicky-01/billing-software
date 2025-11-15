@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { getQRCode, saveQRCode } from '@/lib/storage';
 import { useToast } from '@/context/ToastContext';
 
@@ -66,14 +67,17 @@ export default function QRCodeSettings() {
         <div className="mb-8 pb-8 border-b border-gray-200">
           <h4 className="text-sm font-semibold text-gray-700 mb-4">Current QR Code</h4>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-            <img
-              src={qrImage}
-              alt="Payment QR Code"
-              className="w-40 h-40 object-contain rounded-lg border-2 border-blue-200 bg-gray-50 p-4"
-            />
+            <div className="relative w-40 h-40 rounded-lg border-2 border-blue-200 bg-gray-50 p-4">
+              <Image
+                src={qrImage}
+                alt="Payment QR Code"
+                fill
+                className="object-contain"
+              />
+            </div>
             <div className="flex-1">
               <p className="text-gray-600 mb-4">
-                This QR code will be displayed to customers when they click "Pay Now"
+                This QR code will be displayed to customers when they click &quot;Pay Now&quot;
               </p>
               <button
                 onClick={handleRemoveQR}
