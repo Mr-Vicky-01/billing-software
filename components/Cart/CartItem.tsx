@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { CartItem as CartItemType } from '@/lib/types';
 import { useCart } from '@/context/CartContext';
 
@@ -14,12 +15,13 @@ export default function CartItem({ cartItem }: CartItemProps) {
   return (
     <div className="bg-white rounded-2xl shadow-professional border border-gray-100 p-5 sm:p-6 hover:shadow-modern-lg transition-all duration-300 animate-slide-up">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
-        <div className="w-full sm:w-24 h-40 sm:h-24 bg-gray-200 rounded-xl flex-shrink-0 overflow-hidden">
+        <div className="relative w-full sm:w-24 h-40 sm:h-24 bg-gray-200 rounded-xl flex-shrink-0 overflow-hidden">
           {item.image ? (
-            <img
+            <Image
               src={item.image}
               alt={item.name}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = '/placeholder.png';
               }}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { MenuItem } from '@/lib/types';
 import {
   getMenuItems,
@@ -286,10 +287,11 @@ export default function ManagePage() {
                 <div className="mt-3">
                   <p className="text-xs text-gray-500 mb-2">Preview:</p>
                   <div className="relative w-full h-48 border border-gray-200 rounded-lg overflow-hidden bg-gray-100">
-                    <img
+                    <Image
                       src={imagePreview}
                       alt="Preview"
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
                       onError={() => setImagePreview('')}
                     />
                     <button
@@ -357,12 +359,13 @@ export default function ManagePage() {
                   className="border border-gray-200 rounded-lg p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 hover:bg-gray-50"
                 >
                   <div className="flex items-center gap-3 sm:gap-4 flex-grow w-full sm:w-auto">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-200 rounded flex-shrink-0">
+                    <div className="relative w-12 h-12 sm:w-16 sm:h-16 bg-gray-200 rounded flex-shrink-0">
                       {item.image ? (
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
-                          className="w-full h-full object-cover rounded"
+                          fill
+                          className="object-cover rounded"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = '/placeholder.png';
                           }}
