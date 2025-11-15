@@ -29,52 +29,53 @@ export default function ReportsPage() {
   const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
 
   return (
-    <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-10 pb-10">
-      <div className="mb-8 sm:mb-12">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-blue-300"></div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center">
-            <span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-              Monthly Sales Reports
-            </span>
-          </h1>
-          <div className="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-blue-300"></div>
+    <div className="min-h-screen bg-gradient-soft">
+      <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-10 pb-10">
+        <div className="mb-8 sm:mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-blue-300"></div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center">
+              <span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+                Monthly Sales Reports
+              </span>
+            </h1>
+            <div className="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-blue-300"></div>
+          </div>
         </div>
-      </div>
 
-      {/* Date Selection */}
-      <div className="bg-white rounded-2xl shadow-modern-lg border border-gray-100 p-5 sm:p-6 mb-6 sm:mb-8 animate-fade-in">
-        <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-end">
-          <div className="w-full sm:w-auto">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Year
-            </label>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className="w-full sm:w-auto px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm font-medium"
-            >
-              {years.map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
-          </div>
-          <div className="w-full sm:w-auto">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Month
-            </label>
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(Number(e.target.value))}
-              className="w-full sm:w-auto px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm font-medium"
-            >
-              {months.map((month, index) => (
-                <option key={index} value={index}>{month}</option>
-              ))}
-            </select>
+        {/* Date Selection */}
+        <div className="bg-white rounded-2xl shadow-modern-lg border border-gray-100 p-5 sm:p-6 mb-6 sm:mb-8 animate-fade-in">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-end">
+            <div className="w-full sm:w-auto">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Year
+              </label>
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(Number(e.target.value))}
+                className="w-full sm:w-auto px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm font-medium"
+              >
+                {years.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+            </div>
+            <div className="w-full sm:w-auto">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Month
+              </label>
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                className="w-full sm:w-auto px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm font-medium"
+              >
+                {months.map((month, index) => (
+                  <option key={index} value={index}>{month}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
-      </div>
 
       {/* Current Month Report */}
       <div className="bg-white rounded-2xl shadow-modern-lg border border-gray-100 p-6 sm:p-8 mb-6 sm:mb-8 animate-slide-up">

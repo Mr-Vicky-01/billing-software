@@ -143,21 +143,22 @@ export default function ManagePage() {
   };
 
   return (
-    <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-10 pb-10">
-      <div className="mb-8 sm:mb-12">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-blue-300"></div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center">
-            <span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-              Manage Menu
-            </span>
-          </h1>
-          <div className="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-blue-300"></div>
+    <div className="min-h-screen bg-gradient-premium">
+      <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-10 pb-10">
+        <div className="mb-8 sm:mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-blue-300"></div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center">
+              <span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+                Manage Menu
+              </span>
+            </h1>
+            <div className="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-blue-300"></div>
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-        {/* Form Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          {/* Form Section */}
         <div className="bg-white rounded-2xl shadow-modern-lg border border-gray-200/50 p-5 sm:p-6 animate-fade-in">
           <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-5 text-gray-800">
             {editingItem ? 'Edit Item' : 'Add New Item'}
