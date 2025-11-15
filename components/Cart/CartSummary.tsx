@@ -1,7 +1,7 @@
 'use client';
 
 import { useCart } from '@/context/CartContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PaymentModal from '@/components/Payment/PaymentModal';
 
 interface CartSummaryProps {
@@ -17,6 +17,12 @@ export default function CartSummary({
 }: CartSummaryProps) {
   const { cart, getTotal } = useCart();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const total = getTotal();
   const subtotal = total;
   const tax = total * 0.1; // 10% tax
@@ -26,6 +32,15 @@ export default function CartSummary({
     setShowPaymentModal(false);
     onPayNow();
   };
+
+  // Prevent hydration mismatch by only rendering on client
+  if (!isClient) {
+    return (
+      <div className="bg-white rounded-2xl shadow-modern-lg p-6 sm:p-8 text-center border border-gray-100">
+        <p className="text-gray-500 text-lg font-medium mb-4">Loading cart...</p>
+      </div>
+    );
+  }
 
   if (cart.length === 0) {
     return (

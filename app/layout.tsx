@@ -8,6 +8,9 @@ import ToastsContainer from "@/components/common/ToastsContainer";
 export const metadata: Metadata = {
   title: "Sports Shop Billing System",
   description: "Billing software for sports shop",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

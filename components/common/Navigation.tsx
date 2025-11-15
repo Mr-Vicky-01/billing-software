@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import { LogoWithText } from '@/components/Logo';
 
 export default function Navigation() {
   const { cart } = useCart();
@@ -34,15 +35,8 @@ export default function Navigation() {
       <div className="container mx-auto px-4 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           {/* Logo/Brand */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 group-hover:bg-white/30 transition-all duration-200">
-              <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-            </div>
-            <span className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
-              Sports Shop
-            </span>
+          <Link href="/" className="flex items-center group">
+            <LogoWithText size="md" />
           </Link>
           
           {/* Desktop Navigation */}

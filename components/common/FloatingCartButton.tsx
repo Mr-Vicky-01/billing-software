@@ -2,13 +2,21 @@
 
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
+import { useEffect, useState } from 'react';
 
 export default function FloatingCartButton() {
   const { cart, getTotal } = useCart();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const total = getTotal();
 
-  if (itemCount === 0) {
+  // Prevent hydration mismatch by only rendering on client
+  if (!isClient || itemCount === 0) {
     return null;
   }
 

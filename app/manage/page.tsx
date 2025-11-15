@@ -400,6 +400,7 @@ export default function ManagePage() {
             </div>
           )}
         </div>
+        </div>
       </div>
     </div>
   );
