@@ -236,8 +236,8 @@ export default function ManagePage() {
                       }
                     }}
                     className={`flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${imageInputType === 'url'
-                        ? 'bg-white text-primary-600 shadow-sm'
-                        : 'text-slate-500 hover:text-slate-700'
+                      ? 'bg-white text-primary-600 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700'
                       }`}
                   >
                     Image URL
@@ -254,8 +254,8 @@ export default function ManagePage() {
                       }
                     }}
                     className={`flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${imageInputType === 'upload'
-                        ? 'bg-white text-primary-600 shadow-sm'
-                        : 'text-slate-500 hover:text-slate-700'
+                      ? 'bg-white text-primary-600 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700'
                       }`}
                   >
                     Upload Image

@@ -4,7 +4,7 @@ import QRCodeSettings from '@/components/Settings/QRCodeSettings';
 
 export default function SettingsPage() {
   return (
-    <div className="min-h-screen bg-gradient-premium">
+    <div className="min-h-screen">
       <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-10 pb-10">
         <div className="mb-8 sm:mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">

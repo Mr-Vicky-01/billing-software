@@ -14,17 +14,19 @@ export default function Navigation() {
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      // Throttle scroll event
-      if (!window.requestAnimationFrame) {
-        setScrolled(window.scrollY > 20);
-        return;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
       }
-      window.requestAnimationFrame(() => {
-        setScrolled(window.scrollY > 20);
-      });
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -39,10 +41,16 @@ export default function Navigation() {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4 pointer-events-none">
-      <nav className={`pointer-events-auto transition-all duration-500 ease-out ${scrolled
-        ? 'w-auto rounded-full bg-white/80 backdrop-blur-xl shadow-modern-lg border border-white/40 py-2 px-6 mt-2'
-        : 'w-full max-w-7xl rounded-2xl bg-white/60 backdrop-blur-md shadow-sm border border-white/30 py-3 px-6'
-        }`}>
+      <nav
+        className={`pointer-events-auto ${scrolled
+          ? 'w-auto rounded-full bg-white/80 backdrop-blur-xl shadow-modern-lg border border-white/40 py-2 px-6 mt-2'
+          : 'w-full max-w-7xl rounded-2xl bg-white/60 backdrop-blur-md shadow-sm border border-white/30 py-3 px-6'
+          }`}
+        style={{
+          transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          willChange: 'width, padding, margin, border-radius, background-color, box-shadow'
+        }}
+      >
         <div className="flex items-center justify-between gap-8">
           {/* Logo/Brand */}
           <Link href="/" className="flex items-center group hover:opacity-80 transition-opacity shrink-0">

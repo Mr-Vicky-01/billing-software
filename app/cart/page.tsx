@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import { useToast } from '@/context/ToastContext';
+import { useDialog } from '@/context/DialogContext';
 import CartItem from '@/components/Cart/CartItem';
 import CartSummary from '@/components/Cart/CartSummary';
 import BillPreview from '@/components/Bill/BillPreview';
@@ -10,6 +11,7 @@ import BillPreview from '@/components/Bill/BillPreview';
 export default function CartPage() {
   const { cart, payNow, clearCart } = useCart();
   const { showToast } = useToast();
+  const { showDialog } = useDialog();
   const [showPrintView, setShowPrintView] = useState(false);
 
   const handlePayNow = () => {
@@ -28,9 +30,18 @@ export default function CartPage() {
     }, 100);
   };
 
-  const handleClearCart = () => {
-    if (confirm('Are you sure you want to clear the cart?')) {
+  const handleClearCart = async () => {
+    const confirmed = await showDialog({
+      title: 'Clear Cart',
+      message: 'Are you sure you want to clear the cart? This action cannot be undone.',
+      confirmText: 'Clear Cart',
+      cancelText: 'Cancel',
+      type: 'warning',
+    });
+
+    if (confirmed) {
       clearCart();
+      showToast('Cart cleared successfully', 'success');
     }
   };
 
