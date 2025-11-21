@@ -15,7 +15,14 @@ export default function Navigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      // Throttle scroll event
+      if (!window.requestAnimationFrame) {
+        setScrolled(window.scrollY > 20);
+        return;
+      }
+      window.requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 20);
+      });
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -31,51 +38,62 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className={`sticky top-0 z-50 bg-gradient-to-r from-blue-600 via-blue-700 to-blue-600 text-white shadow-modern-lg transition-all duration-300 ${scrolled ? 'shadow-modern-xl' : ''}`}>
-      <div className="container mx-auto px-4 py-3 sm:py-4">
-        <div className="flex items-center justify-between">
+    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4 pointer-events-none">
+      <nav className={`pointer-events-auto transition-all duration-500 ease-out ${scrolled
+        ? 'w-auto rounded-full bg-white/80 backdrop-blur-xl shadow-modern-lg border border-white/40 py-2 px-6 mt-2'
+        : 'w-full max-w-7xl rounded-2xl bg-white/60 backdrop-blur-md shadow-sm border border-white/30 py-3 px-6'
+        }`}>
+        <div className="flex items-center justify-between gap-8">
           {/* Logo/Brand */}
-          <Link href="/" className="flex items-center group">
-            <LogoWithText size="md" />
+          <Link href="/" className="flex items-center group hover:opacity-80 transition-opacity shrink-0">
+            <LogoWithText size={scrolled ? "sm" : "md"} />
           </Link>
-          
+
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1 lg:gap-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm lg:text-base transition-all duration-200 ${
-                  isActive(link.href)
-                    ? 'bg-white/25 backdrop-blur-sm text-white shadow-lg'
-                    : 'hover:bg-white/15 hover:text-white text-white/90'
-                }`}
-              >
-                <svg className="w-5 h-5 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d={link.icon} />
-                </svg>
-                <span className="font-semibold">{link.label}</span>
-              </Link>
-            ))}
-            
+          <div className="hidden md:flex items-center gap-2">
+            {navLinks.map((link) => {
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`relative flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all duration-300 group overflow-hidden ${active
+                    ? 'text-white shadow-lg shadow-primary-500/30'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                    }`}
+                >
+                  {active && (
+                    <span className="absolute inset-0 bg-gradient-to-r from-primary-500 to-primary-600 rounded-full -z-10" />
+                  )}
+                  <svg className={`w-5 h-5 transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-110'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={link.icon} />
+                  </svg>
+                  <span className="font-semibold">{link.label}</span>
+                </Link>
+              );
+            })}
+
+            <div className="w-px h-6 bg-slate-200 mx-2" />
+
             {/* Cart Link */}
             <Link
               href="/cart"
-              className={`relative flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm lg:text-base transition-all duration-200 ${
-                isActive('/cart')
-                  ? 'bg-white/25 backdrop-blur-sm text-white shadow-lg'
-                  : 'hover:bg-white/15 hover:text-white text-white/90'
-              }`}
+              className={`relative flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all duration-300 group ${isActive('/cart')
+                ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20'
+                : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
+                }`}
             >
-              <svg className="w-5 h-5 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
+              <div className="relative">
+                <svg className="w-5 h-5 transition-transform duration-300 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                {itemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-sm border border-white animate-bounce-subtle">
+                    {itemCount > 99 ? '99+' : itemCount}
+                  </span>
+                )}
+              </div>
               <span className="font-semibold">Cart</span>
-              {itemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg border-2 border-white animate-bounce">
-                  {itemCount > 99 ? '99+' : itemCount}
-                </span>
-              )}
             </Link>
           </div>
 
@@ -83,27 +101,27 @@ export default function Navigation() {
           <div className="md:hidden flex items-center gap-2">
             <Link
               href="/cart"
-              className="relative p-2.5 hover:bg-white/10 rounded-lg transition-all active:scale-95"
+              className="relative p-2 hover:bg-slate-100 rounded-full transition-all active:scale-95 text-slate-600"
             >
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
               {itemCount > 0 && (
-                <span className="absolute top-1 right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg">
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-sm border border-white">
                   {itemCount > 9 ? '9+' : itemCount}
                 </span>
               )}
             </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 hover:bg-white/10 rounded-lg transition-all active:scale-95"
+              className="p-2 hover:bg-slate-100 rounded-full transition-all active:scale-95 text-slate-600"
               aria-label="Toggle menu"
             >
-              <svg className="w-6 h-6 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mobileMenuOpen ? (
-                  <path d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
-                  <path d="M4 6h16M4 12h16M4 18h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 )}
               </svg>
             </button>
@@ -112,27 +130,26 @@ export default function Navigation() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-white/20 pt-4 animate-slideDown space-y-2">
+          <div className="md:hidden mt-4 pb-2 border-t border-slate-100 pt-4 animate-slide-down space-y-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
-                  isActive(link.href)
-                    ? 'bg-white/25 backdrop-blur-sm text-white shadow-lg'
-                    : 'hover:bg-white/15 text-white/90'
-                }`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${isActive(link.href)
+                  ? 'bg-primary-50 text-primary-600 shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-50'
+                  }`}
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d={link.icon} />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={link.icon} />
                 </svg>
                 <span>{link.label}</span>
               </Link>
             ))}
           </div>
         )}
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }

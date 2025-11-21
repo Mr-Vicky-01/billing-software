@@ -16,70 +16,78 @@ export default function Home() {
     };
 
     loadItems();
-    
-    // Listen for storage changes (when items are updated from manage page)
+
+    // Listen for storage changes (cross-tab updates)
     const handleStorageChange = () => {
       loadItems();
     };
-    
+
+    // Listen for custom event (same-tab updates)
+    const handleCustomEvent = () => {
+      loadItems();
+    };
+
     window.addEventListener('storage', handleStorageChange);
-    // Also check periodically in case of same-tab updates
-    const interval = setInterval(loadItems, 500);
-    
+    window.addEventListener('menu-items-updated', handleCustomEvent);
+
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      clearInterval(interval);
+      window.removeEventListener('menu-items-updated', handleCustomEvent);
     };
   }, []);
 
   return (
     <>
-      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 pb-24 sm:pb-28">
-        {/* Enhanced Header Section */}
-        <div className="text-center mb-8 sm:mb-12">
-          {/* Icon Badge */}
-          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg mb-4 sm:mb-6 transform hover:scale-105 transition-transform duration-300 ring-4 ring-blue-200">
-            <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </div>
-          
-          {/* Main Title */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-3 sm:mb-4">
-            <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-600 bg-clip-text text-transparent">
-              Our Products
-            </span>
-          </h1>
-          
-          {/* Subtitle with Icon */}
-          <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
-            </svg>
-            <p className="text-base sm:text-lg text-gray-700 font-medium">
-              Browse our collection & add items to cart
-            </p>
-          </div>
-          
-          {/* Decorative Divider */}
-          <div className="flex items-center justify-center gap-3 mb-6 sm:mb-8">
-            <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-blue-300"></div>
-            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-            <div className="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-blue-300"></div>
-          </div>
-          
-          {/* Item Count Badge */}
-          {items.length > 0 && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full text-sm sm:text-base text-blue-700 font-medium shadow-sm ring-2 ring-blue-100">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>{items.length} {items.length === 1 ? 'Product' : 'Products'} Available</span>
+      <div className="min-h-screen bg-mesh">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-24 sm:pb-32">
+          {/* Modern Hero Section */}
+          <div className="relative mb-12 sm:mb-16 text-center">
+            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary-400/20 to-secondary-400/20 blur-3xl rounded-full transform -translate-y-1/2"></div>
+
+            <div className="inline-flex items-center justify-center p-2 mb-6 bg-white/50 backdrop-blur-sm rounded-full border border-white/50 shadow-sm animate-fade-in">
+              <span className="px-3 py-1 text-xs font-semibold tracking-wide text-primary-700 uppercase bg-primary-50 rounded-full">New Collection</span>
+              <span className="ml-2 text-sm text-slate-600">Check out our latest arrivals</span>
             </div>
-          )}
+
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-primary-800 to-slate-900 animate-gradient">
+              Premium Sports Gear
+            </h1>
+
+            <p className="max-w-2xl mx-auto text-lg sm:text-xl text-slate-600 mb-8 leading-relaxed">
+              Elevate your game with our curated collection of high-performance equipment.
+              Designed for champions, built for durability.
+            </p>
+
+            {/* Stats/Features */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto mb-8">
+              {[
+                { label: 'Products', value: items.length, icon: '🛍️' },
+                { label: 'Quality', value: 'Premium', icon: '⭐' },
+                { label: 'Delivery', value: 'Fast', icon: '🚚' },
+                { label: 'Support', value: '24/7', icon: '💬' },
+              ].map((stat, index) => (
+                <div key={index} className="glass p-4 rounded-2xl text-center hover-lift">
+                  <div className="text-2xl mb-1">{stat.icon}</div>
+                  <div className="font-bold text-slate-800">{stat.value}</div>
+                  <div className="text-xs text-slate-500 uppercase tracking-wider">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Content Section */}
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                <span className="w-2 h-8 bg-primary-500 rounded-full"></span>
+                Featured Products
+              </h2>
+              <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent ml-6"></div>
+            </div>
+
+            <MenuGrid items={items} />
+          </div>
         </div>
-        
-        <MenuGrid items={items} />
       </div>
       <FloatingCartButton />
     </>

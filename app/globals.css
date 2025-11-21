@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --background: #f0f4f8;
-  --foreground: #1e293b;
+  --background: #f8fafc;
+  --foreground: #0f172a;
   --primary: #0ea5e9;
   --primary-dark: #0284c7;
+  --secondary: #8b5cf6;
 }
 
 html {
@@ -15,12 +16,12 @@ html {
 
 body {
   color: var(--foreground);
-  background: linear-gradient(135deg, #f0f4f8 0%, #e0e7ff 50%, #fce7f3 100%);
-  background-attachment: fixed;
+  background: #f8fafc;
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 @layer utilities {
@@ -28,13 +29,36 @@ body {
     text-wrap: balance;
   }
   
+  /* Glassmorphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  }
+
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
   /* Modern gradient backgrounds */
   .bg-gradient-soft {
-    background: linear-gradient(135deg, rgba(243, 232, 255, 0.5) 0%, rgba(224, 242, 254, 0.5) 100%);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   }
   
   .bg-gradient-premium {
-    background: linear-gradient(135deg, rgba(240, 253, 250, 0.4) 0%, rgba(229, 229, 255, 0.4) 100%);
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
   }
   
   /* Animated gradient background */
@@ -42,6 +66,18 @@ body {
     background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     background-size: 400% 400%;
     animation: gradient-shift 15s ease infinite;
+  }
+  
+  .bg-mesh {
+    background-color: #f0f9ff;
+    background-image: 
+      radial-gradient(at 40% 20%, hsla(213,100%,77%,1) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsla(189,100%,56%,1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsla(341,100%,85%,1) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, hsla(269,100%,77%,1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(213,100%,77%,1) 0px, transparent 50%),
+      radial-gradient(at 80% 100%, hsla(242,100%,70%,1) 0px, transparent 50%),
+      radial-gradient(at 0% 0%, hsla(343,100%,76%,1) 0px, transparent 50%);
   }
   
   @keyframes gradient-shift {
@@ -58,19 +94,6 @@ body {
 
 .shadow-professional-lg {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-/* Modern shadows */
-.shadow-modern {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-}
-
-.shadow-modern-lg {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-.shadow-modern-xl {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
 /* Print styles for bills */
@@ -96,6 +119,7 @@ body {
 .card-glow {
   position: relative;
   background: white;
+  overflow: hidden;
 }
 
 .card-glow::before {
@@ -103,13 +127,19 @@ body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.5), rgba(139, 92, 246, 0.5));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-glow:hover::before {
+  opacity: 1;
 }
 
 /* Backdrop blur effect */
@@ -117,144 +147,33 @@ body {
   backdrop-filter: blur(4px);
 }
 
-/* Floating cart button animation */
-@keyframes pulse-subtle {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.95;
-    transform: scale(1.02);
-  }
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.animate-pulse-subtle {
-  animation: pulse-subtle 3s ease-in-out infinite;
+::-webkit-scrollbar-track {
+  background: #f1f5f9; 
 }
 
-/* Fade in animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1; 
+  border-radius: 4px;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out;
-}
-
-/* Slide up animation */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-slide-up {
-  animation: slideUp 0.5s ease-out;
-}
-
-/* Slide down animation for mobile menu */
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-slideDown {
-  animation: slideDown 0.3s ease-out;
-}
-
-/* Subtle bounce animation for cart badge */
-@keyframes bounce-subtle {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
-}
-
-.animate-bounce-subtle {
-  animation: bounce-subtle 2s ease-in-out infinite;
-}
-
-/* Toast slide-in animation */
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.animate-slideInRight {
-  animation: slideInRight 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Subtle grid pattern background */
-.bg-grid-pattern {
-  background-image: 
-    linear-gradient(0deg, transparent 24%, rgba(59, 130, 246, 0.05) 25%, rgba(59, 130, 246, 0.05) 26%, transparent 27%, transparent 74%, rgba(59, 130, 246, 0.05) 75%, rgba(59, 130, 246, 0.05) 76%, transparent 77%, transparent),
-    linear-gradient(90deg, transparent 24%, rgba(59, 130, 246, 0.05) 25%, rgba(59, 130, 246, 0.05) 26%, transparent 27%, transparent 74%, rgba(59, 130, 246, 0.05) 75%, rgba(59, 130, 246, 0.05) 76%, transparent 77%, transparent);
-  background-size: 50px 50px;
-}
-
-/* Subtle bounce animation for cart badge */
-@keyframes bounce-subtle {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
-}
-
-.animate-bounce-subtle {
-  animation: bounce-subtle 2s ease-in-out infinite;
-}
-
-/* Toast slide-in animation */
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-.animate-slideInRight {
-  animation: slideInRight 0.3s ease-out forwards;
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; 
 }
 
 /* Modern hover effects */
 .hover-lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 8px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Gradient text animation */
@@ -279,7 +198,7 @@ body {
 
 .focus-ring:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.5);
 }
 
 /* Loading shimmer effect */

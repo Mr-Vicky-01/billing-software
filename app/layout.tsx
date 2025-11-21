@@ -24,7 +24,7 @@ export default function RootLayout({
         <ToastProvider>
           <CartProvider>
             <Navigation />
-            <main className="min-h-screen relative">{children}</main>
+            <main className="min-h-screen relative pt-24">{children}</main>
             <ToastsContainer />
           </CartProvider>
         </ToastProvider>

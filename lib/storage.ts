@@ -82,6 +82,7 @@ export const getMenuItems = (): MenuItem[] => {
 export const saveMenuItems = (items: MenuItem[]): void => {
   if (typeof window === 'undefined') return;
   localStorage.setItem(STORAGE_KEYS.MENU_ITEMS, JSON.stringify(items));
+  window.dispatchEvent(new Event('menu-items-updated'));
 };
 
 export const addMenuItem = (item: MenuItem): void => {
