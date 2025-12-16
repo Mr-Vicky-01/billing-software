@@ -24,11 +24,13 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', className = '' }) => {
       className={`${className} object-contain`}
     />
   );
-};export const LogoWithText: React.FC<LogoProps> = ({ size = 'md' }) => {
+}; export const LogoWithText: React.FC<LogoProps> = ({ size = 'md' }) => {
+  const textSize = size === 'lg' ? 'text-2xl' : size === 'md' ? 'text-xl' : 'text-lg';
+
   return (
     <div className="flex items-center gap-2">
       <Logo size={size} />
-      <span className="font-bold text-xl text-white">
+      <span className={`${textSize} font-black tracking-tight bg-gradient-to-r from-blue-600 via-primary-600 to-blue-700 bg-clip-text text-transparent drop-shadow-sm`}>
         Sports Shop
       </span>
     </div>
