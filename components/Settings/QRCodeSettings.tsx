@@ -5,17 +5,24 @@ import Image from 'next/image';
 import { getQRCode, saveQRCode } from '@/lib/storage';
 import { useToast } from '@/context/ToastContext';
 
-export default function QRCodeSettings() {
+interface QRCodeSettingsProps {
+  initialQRCode?: string;
+}
+
+export default function QRCodeSettings({ initialQRCode }: QRCodeSettingsProps) {
   const { showToast } = useToast();
-  const [qrImage, setQRImage] = useState<string | null>(null);
+  const [qrImage, setQRImage] = useState<string | null>(initialQRCode || null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const savedQR = getQRCode();
-    if (savedQR) {
-      setQRImage(savedQR);
+    // Only check localStorage if no initial QR code was provided
+    if (!initialQRCode) {
+      const savedQR = getQRCode();
+      if (savedQR) {
+        setQRImage(savedQR);
+      }
     }
-  }, []);
+  }, [initialQRCode]);
 
   const handleQRUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
