@@ -2,11 +2,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getMenuItems, addMenuItem, updateMenuItem, deleteMenuItem } from '@/lib/db';
 import { MenuItem } from '@/lib/types';
 
+// Force dynamic - no caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET /api/menu-items - Get all menu items
 export async function GET() {
     try {
         const items = await getMenuItems();
-        return NextResponse.json(items);
+        return NextResponse.json(items, {
+            headers: {
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+            },
+        });
     } catch (error) {
         console.error('Error fetching menu items:', error);
         return NextResponse.json(

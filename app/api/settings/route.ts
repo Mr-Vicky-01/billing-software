@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSettings, saveSettings } from '@/lib/db';
 
+// Force dynamic - no caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET /api/settings - Get settings (QR code)
 export async function GET() {
     try {
         const settings = await getSettings();
-        return NextResponse.json(settings);
+        return NextResponse.json(settings, {
+            headers: {
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+            },
+        });
     } catch (error) {
         console.error('Error fetching settings:', error);
         return NextResponse.json(

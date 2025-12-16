@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getTransactions, saveTransaction, getTransactionsByMonth } from '@/lib/db';
 import { Transaction } from '@/lib/types';
 
+// Force dynamic - no caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET /api/transactions - Get transactions (optionally filtered by month)
 export async function GET(request: NextRequest) {
     try {
@@ -20,7 +24,11 @@ export async function GET(request: NextRequest) {
             transactions = await getTransactions();
         }
 
-        return NextResponse.json(transactions);
+        return NextResponse.json(transactions, {
+            headers: {
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+            },
+        });
     } catch (error) {
         console.error('Error fetching transactions:', error);
         return NextResponse.json(

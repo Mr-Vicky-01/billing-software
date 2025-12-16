@@ -2,6 +2,10 @@ import MenuGrid from '@/components/Menu/MenuGrid';
 import FloatingCartButton from '@/components/common/FloatingCartButton';
 import { getMenuItems } from '@/lib/db';
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function Home() {
   // Server-side data fetching
   const items = await getMenuItems();
