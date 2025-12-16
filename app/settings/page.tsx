@@ -1,8 +1,10 @@
-'use client';
-
 import QRCodeSettings from '@/components/Settings/QRCodeSettings';
+import { getSettings } from '@/lib/db';
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  // Server-side data fetching
+  const settings = await getSettings();
+
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-10 pb-10">
@@ -19,7 +21,7 @@ export default function SettingsPage() {
         </div>
 
         <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
-          <QRCodeSettings />
+          <QRCodeSettings initialQRCode={settings.qrCode} />
         </div>
       </div>
     </div>

@@ -1,40 +1,10 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { MenuItem } from '@/lib/types';
-import { getMenuItems } from '@/lib/storage';
 import MenuGrid from '@/components/Menu/MenuGrid';
 import FloatingCartButton from '@/components/common/FloatingCartButton';
+import { getMenuItems } from '@/lib/db';
 
-export default function Home() {
-  const [items, setItems] = useState<MenuItem[]>([]);
-
-  useEffect(() => {
-    const loadItems = () => {
-      const menuItems = getMenuItems();
-      setItems(menuItems);
-    };
-
-    loadItems();
-
-    // Listen for storage changes (cross-tab updates)
-    const handleStorageChange = () => {
-      loadItems();
-    };
-
-    // Listen for custom event (same-tab updates)
-    const handleCustomEvent = () => {
-      loadItems();
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('menu-items-updated', handleCustomEvent);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('menu-items-updated', handleCustomEvent);
-    };
-  }, []);
+export default async function Home() {
+  // Server-side data fetching
+  const items = await getMenuItems();
 
   return (
     <>
@@ -79,7 +49,7 @@ export default function Home() {
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <span className="w-2 h-8 bg-primary-500 rounded-full"></span>
+                <span className="w-2 h-8 bg-p.rimary-500 rounded-full"></span>
                 Featured Products
               </h2>
               <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent ml-6"></div>

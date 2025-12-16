@@ -42,7 +42,7 @@ export default function Navigation() {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4 pointer-events-none">
       <nav
-        className={`pointer-events-auto ${scrolled
+        className={`relative pointer-events-auto ${scrolled
           ? 'w-auto rounded-full bg-white/80 backdrop-blur-xl shadow-modern-lg border border-white/40 py-2 px-6 mt-2'
           : 'w-full max-w-7xl rounded-2xl bg-white/60 backdrop-blur-md shadow-sm border border-white/30 py-3 px-6'
           }`}
@@ -138,7 +138,13 @@ export default function Navigation() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-2 border-t border-slate-100 pt-4 animate-slide-down space-y-1">
+          <div
+            className={`md:hidden fixed left-0 right-0 mt-4 mx-4 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-white/40 p-4 space-y-1 animate-slide-down ${scrolled ? 'top-20' : 'top-24'
+              }`}
+            style={{
+              transition: 'top 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            }}
+          >
             {navLinks.map((link) => (
               <Link
                 key={link.href}
