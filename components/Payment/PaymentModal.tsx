@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getQRCode, saveQRCode } from '@/lib/storage';
+import { getSettings, saveSettings } from '@/lib/api';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -22,10 +22,17 @@ export default function PaymentModal({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Load QR code on mount
-    const savedQR = getQRCode();
-    if (savedQR) {
-      setQRImage(savedQR);
+    // Load QR code from server on mount
+    if (isOpen) {
+      getSettings()
+        .then((settings) => {
+          if (settings.qrCode) {
+            setQRImage(settings.qrCode);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching QR code:', error);
+        });
     }
   }, [isOpen]);
 
@@ -46,21 +53,32 @@ export default function PaymentModal({
 
       setLoading(true);
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const result = reader.result as string;
-        setQRImage(result);
-        saveQRCode(result);
-        setShowUpload(false);
-        setLoading(false);
+        try {
+          await saveSettings({ qrCode: result });
+          setQRImage(result);
+          setShowUpload(false);
+        } catch (error) {
+          console.error('Error saving QR code:', error);
+          alert('Failed to save QR code');
+        } finally {
+          setLoading(false);
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleRemoveQR = () => {
-    setQRImage(null);
-    saveQRCode('');
-    setShowUpload(true);
+  const handleRemoveQR = async () => {
+    try {
+      await saveSettings({ qrCode: '' });
+      setQRImage(null);
+      setShowUpload(true);
+    } catch (error) {
+      console.error('Error removing QR code:', error);
+      alert('Failed to remove QR code');
+    }
   };
 
   if (!isOpen) return null;
@@ -186,11 +204,10 @@ export default function PaymentModal({
           <button
             onClick={onConfirm}
             disabled={!qrImage}
-            className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all active:scale-95 flex items-center justify-center gap-2 ${
-              qrImage
+            className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all active:scale-95 flex items-center justify-center gap-2 ${qrImage
                 ? 'bg-gradient-to-r from-green-600 to-green-700 text-white hover:shadow-lg'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
+              }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

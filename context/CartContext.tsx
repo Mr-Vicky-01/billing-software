@@ -2,7 +2,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { CartItem, MenuItem } from '@/lib/types';
-import { getCart, saveCart, clearCart, saveTransaction } from '@/lib/storage';
+import { getCart, saveCart, clearCart } from '@/lib/storage';
+import { saveTransaction } from '@/lib/api';
 import { useToast } from './ToastContext';
 
 interface CartContextType {
@@ -80,7 +81,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return cart.reduce((sum, item) => sum + item.item.price * item.quantity, 0);
   };
 
-  const payNow = () => {
+  const payNow = async () => {
     if (cart.length === 0) return;
 
     const total = getTotal();
@@ -92,9 +93,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       timestamp: Date.now(),
     };
 
-    saveTransaction(transaction);
-    clearCartHandler();
-    showToast(`Payment successful! ₹${total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 'success', 5000);
+    try {
+      await saveTransaction(transaction);
+      clearCartHandler();
+      showToast(`Payment successful! ₹${total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 'success', 5000);
+    } catch (error) {
+      console.error('Error saving transaction:', error);
+      showToast('Payment failed. Please try again.', 'error', 5000);
+    }
   };
 
   return (

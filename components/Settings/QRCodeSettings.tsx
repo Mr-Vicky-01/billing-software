@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getQRCode, saveQRCode } from '@/lib/storage';
+import { getSettings, saveSettings } from '@/lib/api';
 import { useToast } from '@/context/ToastContext';
 
 interface QRCodeSettingsProps {
@@ -15,12 +15,17 @@ export default function QRCodeSettings({ initialQRCode }: QRCodeSettingsProps) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Only check localStorage if no initial QR code was provided
+    // Fetch QR code from server if not provided as prop
     if (!initialQRCode) {
-      const savedQR = getQRCode();
-      if (savedQR) {
-        setQRImage(savedQR);
-      }
+      getSettings()
+        .then((settings) => {
+          if (settings.qrCode) {
+            setQRImage(settings.qrCode);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching QR code:', error);
+        });
     }
   }, [initialQRCode]);
 
@@ -41,22 +46,33 @@ export default function QRCodeSettings({ initialQRCode }: QRCodeSettingsProps) {
 
       setLoading(true);
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const result = reader.result as string;
-        setQRImage(result);
-        saveQRCode(result);
-        showToast('QR Code updated successfully!', 'success');
-        setLoading(false);
+        try {
+          await saveSettings({ qrCode: result });
+          setQRImage(result);
+          showToast('QR Code updated successfully!', 'success');
+        } catch (error) {
+          console.error('Error saving QR code:', error);
+          showToast('Failed to save QR code', 'error');
+        } finally {
+          setLoading(false);
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleRemoveQR = () => {
+  const handleRemoveQR = async () => {
     if (confirm('Are you sure you want to remove the QR code?')) {
-      setQRImage(null);
-      saveQRCode('');
-      showToast('QR Code removed', 'info');
+      try {
+        await saveSettings({ qrCode: '' });
+        setQRImage(null);
+        showToast('QR Code removed', 'info');
+      } catch (error) {
+        console.error('Error removing QR code:', error);
+        showToast('Failed to remove QR code', 'error');
+      }
     }
   };
 

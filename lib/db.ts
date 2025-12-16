@@ -1,17 +1,9 @@
 import 'server-only';
 import { MenuItem, Transaction } from './types';
-import fs from 'fs/promises';
-import path from 'path';
-
-// Data directory path
-const DATA_DIR = path.join(process.cwd(), 'data');
-
-// File paths
-const FILES = {
-    MENU_ITEMS: path.join(DATA_DIR, 'menu-items.json'),
-    TRANSACTIONS: path.join(DATA_DIR, 'transactions.json'),
-    SETTINGS: path.join(DATA_DIR, 'settings.json'),
-};
+import connectDB from './mongodb';
+import MenuItemModel from '../models/MenuItem';
+import TransactionModel from '../models/Transaction';
+import SettingsModel from '../models/Settings';
 
 // Default menu items
 const DEFAULT_ITEMS: MenuItem[] = [
@@ -73,43 +65,26 @@ const DEFAULT_ITEMS: MenuItem[] = [
     },
 ];
 
-// Initialize data directory and files
-async function initializeStorage() {
-    try {
-        await fs.mkdir(DATA_DIR, { recursive: true });
-
-        // Initialize menu items if not exists
-        try {
-            await fs.access(FILES.MENU_ITEMS);
-        } catch {
-            await fs.writeFile(FILES.MENU_ITEMS, JSON.stringify(DEFAULT_ITEMS, null, 2));
-        }
-
-        // Initialize transactions if not exists
-        try {
-            await fs.access(FILES.TRANSACTIONS);
-        } catch {
-            await fs.writeFile(FILES.TRANSACTIONS, JSON.stringify([], null, 2));
-        }
-
-        // Initialize settings if not exists
-        try {
-            await fs.access(FILES.SETTINGS);
-        } catch {
-            await fs.writeFile(FILES.SETTINGS, JSON.stringify({ qrCode: '' }, null, 2));
-        }
-    } catch (error) {
-        console.error('Error initializing storage:', error);
-        throw error;
-    }
-}
-
 // Menu Items
 export async function getMenuItems(): Promise<MenuItem[]> {
-    await initializeStorage();
     try {
-        const data = await fs.readFile(FILES.MENU_ITEMS, 'utf-8');
-        return JSON.parse(data);
+        await connectDB();
+        const items = await MenuItemModel.find({}).lean();
+
+        // Initialize with default items if no items exist
+        if (items.length === 0) {
+            await MenuItemModel.insertMany(DEFAULT_ITEMS);
+            return DEFAULT_ITEMS;
+        }
+
+        // Convert MongoDB documents to MenuItem type
+        return items.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            image: item.image,
+            description: item.description,
+        }));
     } catch (error) {
         console.error('Error reading menu items:', error);
         return DEFAULT_ITEMS;
@@ -117,44 +92,64 @@ export async function getMenuItems(): Promise<MenuItem[]> {
 }
 
 export async function saveMenuItems(items: MenuItem[]): Promise<void> {
-    await initializeStorage();
-    await fs.writeFile(FILES.MENU_ITEMS, JSON.stringify(items, null, 2));
+    await connectDB();
+    // Delete all existing items and insert new ones
+    await MenuItemModel.deleteMany({});
+    await MenuItemModel.insertMany(items);
 }
 
 export async function addMenuItem(item: MenuItem): Promise<MenuItem> {
-    const items = await getMenuItems();
-    items.push(item);
-    await saveMenuItems(items);
-    return item;
+    await connectDB();
+    const newItem = await MenuItemModel.create(item);
+    return {
+        id: newItem.id,
+        name: newItem.name,
+        price: newItem.price,
+        image: newItem.image,
+        description: newItem.description,
+    };
 }
 
 export async function updateMenuItem(id: string, updatedItem: Partial<MenuItem>): Promise<MenuItem | null> {
-    const items = await getMenuItems();
-    const index = items.findIndex(item => item.id === id);
-    if (index !== -1) {
-        items[index] = { ...items[index], ...updatedItem };
-        await saveMenuItems(items);
-        return items[index];
-    }
-    return null;
+    await connectDB();
+    const updated = await MenuItemModel.findOneAndUpdate(
+        { id },
+        { $set: updatedItem },
+        { new: true }
+    ).lean();
+
+    if (!updated) return null;
+
+    return {
+        id: updated.id,
+        name: updated.name,
+        price: updated.price,
+        image: updated.image,
+        description: updated.description,
+    };
 }
 
 export async function deleteMenuItem(id: string): Promise<boolean> {
-    const items = await getMenuItems();
-    const filtered = items.filter(item => item.id !== id);
-    if (filtered.length < items.length) {
-        await saveMenuItems(filtered);
-        return true;
-    }
-    return false;
+    await connectDB();
+    const result = await MenuItemModel.deleteOne({ id });
+    return result.deletedCount > 0;
 }
 
 // Transactions
 export async function getTransactions(): Promise<Transaction[]> {
-    await initializeStorage();
     try {
-        const data = await fs.readFile(FILES.TRANSACTIONS, 'utf-8');
-        return JSON.parse(data);
+        await connectDB();
+        const transactions = await TransactionModel.find({})
+            .sort({ timestamp: -1 })
+            .lean();
+
+        return transactions.map(t => ({
+            id: t.id,
+            items: t.items,
+            total: t.total,
+            date: t.date,
+            timestamp: t.timestamp,
+        }));
     } catch (error) {
         console.error('Error reading transactions:', error);
         return [];
@@ -162,14 +157,19 @@ export async function getTransactions(): Promise<Transaction[]> {
 }
 
 export async function saveTransaction(transaction: Transaction): Promise<Transaction> {
-    await initializeStorage();
-    const transactions = await getTransactions();
-    transactions.push(transaction);
-    await fs.writeFile(FILES.TRANSACTIONS, JSON.stringify(transactions, null, 2));
-    return transaction;
+    await connectDB();
+    const newTransaction = await TransactionModel.create(transaction);
+    return {
+        id: newTransaction.id,
+        items: newTransaction.items,
+        total: newTransaction.total,
+        date: newTransaction.date,
+        timestamp: newTransaction.timestamp,
+    };
 }
 
 export async function getTransactionsByMonth(year: number, month: number): Promise<Transaction[]> {
+    await connectDB();
     const transactions = await getTransactions();
     return transactions.filter(t => {
         const date = new Date(t.timestamp);
@@ -179,10 +179,16 @@ export async function getTransactionsByMonth(year: number, month: number): Promi
 
 // Settings (QR Code)
 export async function getSettings(): Promise<{ qrCode: string }> {
-    await initializeStorage();
     try {
-        const data = await fs.readFile(FILES.SETTINGS, 'utf-8');
-        return JSON.parse(data);
+        await connectDB();
+        // Get or create the singleton settings document
+        let settings = await SettingsModel.findOne({}).lean();
+
+        if (!settings) {
+            settings = await SettingsModel.create({ qrCode: '' });
+        }
+
+        return { qrCode: settings.qrCode || '' };
     } catch (error) {
         console.error('Error reading settings:', error);
         return { qrCode: '' };
@@ -190,6 +196,11 @@ export async function getSettings(): Promise<{ qrCode: string }> {
 }
 
 export async function saveSettings(settings: { qrCode: string }): Promise<void> {
-    await initializeStorage();
-    await fs.writeFile(FILES.SETTINGS, JSON.stringify(settings, null, 2));
+    await connectDB();
+    // Update or create the singleton settings document
+    await SettingsModel.findOneAndUpdate(
+        {},
+        { $set: { qrCode: settings.qrCode } },
+        { upsert: true, new: true }
+    );
 }
