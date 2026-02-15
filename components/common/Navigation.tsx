@@ -43,8 +43,8 @@ export default function Navigation() {
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4 pointer-events-none">
       <nav
         className={`relative pointer-events-auto ${scrolled
-          ? 'w-auto rounded-full bg-white/80 backdrop-blur-xl shadow-modern-lg border border-white/40 py-2 px-6 mt-2'
-          : 'w-full max-w-7xl rounded-2xl bg-white/60 backdrop-blur-md shadow-sm border border-white/30 py-3 px-6'
+          ? 'w-auto rounded-full bg-dark-400/80 backdrop-blur-xl shadow-dark-lg border border-accent/10 py-2 px-6 mt-2'
+          : 'w-full max-w-7xl rounded-2xl bg-dark-300/60 backdrop-blur-md shadow-dark border border-dark-50/30 py-3 px-6'
           }`}
         style={{
           transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -58,7 +58,7 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
               const active = isActive(link.href);
               return (
@@ -66,12 +66,12 @@ export default function Navigation() {
                   key={link.href}
                   href={link.href}
                   className={`relative flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all duration-300 group overflow-hidden ${active
-                    ? 'text-white shadow-lg shadow-primary-500/30'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                    ? 'text-dark-400 shadow-glow-sm'
+                    : 'text-ivory-muted hover:text-ivory'
                     }`}
                 >
                   {active && (
-                    <span className="absolute inset-0 bg-gradient-to-r from-primary-500 to-primary-600 rounded-full -z-10" />
+                    <span className="absolute inset-0 bg-accent rounded-full -z-10" />
                   )}
                   <svg className={`w-5 h-5 transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-110'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={link.icon} />
@@ -81,14 +81,14 @@ export default function Navigation() {
               );
             })}
 
-            <div className="w-px h-6 bg-slate-200 mx-2" />
+            <div className="w-px h-6 bg-dark-50/30 mx-2" />
 
             {/* Cart Link */}
             <Link
               href="/cart"
               className={`relative flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all duration-300 group ${isActive('/cart')
-                ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20'
-                : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
+                ? 'bg-ivory text-dark-400 shadow-dark'
+                : 'text-ivory-muted hover:text-ivory'
                 }`}
             >
               <div className="relative">
@@ -96,7 +96,7 @@ export default function Navigation() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 {itemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-sm border border-white animate-bounce-subtle">
+                  <span className="absolute -top-2 -right-2 bg-accent text-dark-400 text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-glow-sm border border-accent-hover">
                     {itemCount > 99 ? '99+' : itemCount}
                   </span>
                 )}
@@ -109,20 +109,20 @@ export default function Navigation() {
           <div className="md:hidden flex items-center gap-2">
             <Link
               href="/cart"
-              className="relative p-2 hover:bg-slate-100 rounded-full transition-all active:scale-95 text-slate-600"
+              className="relative p-2 hover:bg-dark-50/30 rounded-full transition-all active:scale-95 text-ivory-muted"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
               {itemCount > 0 && (
-                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-sm border border-white">
+                <span className="absolute top-0 right-0 bg-accent text-dark-400 text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-glow-sm">
                   {itemCount > 9 ? '9+' : itemCount}
                 </span>
               )}
             </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 hover:bg-slate-100 rounded-full transition-all active:scale-95 text-slate-600"
+              className="p-2 hover:bg-dark-50/30 rounded-full transition-all active:scale-95 text-ivory-muted"
               aria-label="Toggle menu"
             >
               <svg className="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +139,7 @@ export default function Navigation() {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div
-            className={`md:hidden fixed left-0 right-0 mt-4 mx-4 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-white/40 p-4 space-y-1 animate-slide-down ${scrolled ? 'top-20' : 'top-24'
+            className={`md:hidden fixed left-0 right-0 mt-4 mx-4 bg-dark-300/95 backdrop-blur-xl rounded-2xl shadow-dark-xl border border-dark-50/30 p-4 space-y-1 animate-slide-down ${scrolled ? 'top-20' : 'top-24'
               }`}
             style={{
               transition: 'top 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
@@ -151,8 +151,8 @@ export default function Navigation() {
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${isActive(link.href)
-                  ? 'bg-primary-50 text-primary-600 shadow-sm'
-                  : 'text-slate-600 hover:bg-slate-50'
+                  ? 'bg-accent/10 text-accent border border-accent/20'
+                  : 'text-ivory-muted hover:bg-dark-50/20 hover:text-ivory'
                   }`}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -12,22 +12,27 @@ export default async function Home() {
 
   return (
     <>
-      <div className="min-h-screen bg-mesh">
+      <div className="min-h-screen bg-dark-mesh">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-24 sm:pb-32">
-          {/* Modern Hero Section */}
-          <div className="relative mb-12 sm:mb-16 text-center">
-            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary-400/20 to-secondary-400/20 blur-3xl rounded-full transform -translate-y-1/2"></div>
-
-            <div className="inline-flex items-center justify-center p-2 mb-6 bg-white/50 backdrop-blur-sm rounded-full border border-white/50 shadow-sm animate-fade-in">
-              <span className="px-3 py-1 text-xs font-semibold tracking-wide text-primary-700 uppercase bg-primary-50 rounded-full">New Collection</span>
-              <span className="ml-2 text-sm text-slate-600">Check out our latest arrivals</span>
+          {/* Hero Section */}
+          <div className="relative mb-16 sm:mb-20 text-center">
+            {/* Ambient glow behind hero */}
+            <div className="absolute inset-0 -z-10 blur-3xl rounded-full transform -translate-y-1/2">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent/5 rounded-full" />
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-primary-800 to-slate-900 animate-gradient">
+            <div className="animate-reveal-up">
+              <div className="inline-flex items-center justify-center p-2 mb-8 bg-dark-200/60 backdrop-blur-sm rounded-full border border-accent/15 shadow-dark">
+                <span className="px-3 py-1 text-xs font-semibold tracking-widest text-accent uppercase bg-accent/10 rounded-full">New Collection</span>
+                <span className="ml-2 text-sm text-ivory-muted pr-1">Check out our latest arrivals</span>
+              </div>
+            </div>
+
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-black tracking-tight mb-6 text-gold-gradient animate-reveal-up stagger-1">
               Premium Sports Gear
             </h1>
 
-            <p className="max-w-2xl mx-auto text-lg sm:text-xl text-slate-600 mb-8 leading-relaxed">
+            <p className="max-w-2xl mx-auto text-lg sm:text-xl text-ivory-muted mb-10 leading-relaxed animate-reveal-up stagger-2">
               Elevate your game with our curated collection of high-performance equipment.
               Designed for champions, built for durability.
             </p>
@@ -40,10 +45,10 @@ export default async function Home() {
                 { label: 'Delivery', value: 'Fast', icon: '🚚' },
                 { label: 'Support', value: '24/7', icon: '💬' },
               ].map((stat, index) => (
-                <div key={index} className="glass p-4 rounded-2xl text-center hover-lift">
+                <div key={index} className={`dark-card p-4 rounded-2xl text-center hover-glow animate-reveal-up stagger-${index + 3}`}>
                   <div className="text-2xl mb-1">{stat.icon}</div>
-                  <div className="font-bold text-slate-800">{stat.value}</div>
-                  <div className="text-xs text-slate-500 uppercase tracking-wider">{stat.label}</div>
+                  <div className="font-bold text-accent">{stat.value}</div>
+                  <div className="text-xs text-ivory-dim uppercase tracking-wider">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -51,12 +56,12 @@ export default async function Home() {
 
           {/* Content Section */}
           <div className="relative z-10">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <span className="w-2 h-8 bg-p.rimary-500 rounded-full"></span>
+            <div className="flex items-center justify-between mb-8 animate-reveal-up stagger-7">
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-ivory flex items-center gap-3">
+                <span className="w-1 h-8 bg-accent rounded-full" />
                 Featured Products
               </h2>
-              <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent ml-6"></div>
+              <div className="h-px flex-1 bg-gradient-to-r from-dark-50/30 to-transparent ml-6" />
             </div>
 
             <MenuGrid items={items} />

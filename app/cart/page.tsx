@@ -1,118 +1,74 @@
 'use client';
 
-import { useState } from 'react';
-import { useCart } from '@/context/CartContext';
-import { useToast } from '@/context/ToastContext';
-import { useDialog } from '@/context/DialogContext';
+import Link from 'next/link';
 import CartItem from '@/components/Cart/CartItem';
 import CartSummary from '@/components/Cart/CartSummary';
-import BillPreview from '@/components/Bill/BillPreview';
+import FloatingCartButton from '@/components/common/FloatingCartButton';
+import { useCart } from '@/context/CartContext';
 
 export default function CartPage() {
-  const { cart, payNow, clearCart } = useCart();
-  const { showToast } = useToast();
-  const { showDialog } = useDialog();
-  const [showPrintView, setShowPrintView] = useState(false);
-
-  const handlePayNow = () => {
-    payNow();
-  };
-
-  const handlePrintBill = () => {
-    if (cart.length === 0) {
-      showToast('Your cart is empty!', 'warning');
-      return;
-    }
-    setShowPrintView(true);
-    setTimeout(() => {
-      window.print();
-      setShowPrintView(false);
-    }, 100);
-  };
-
-  const handleClearCart = async () => {
-    const confirmed = await showDialog({
-      title: 'Clear Cart',
-      message: 'Are you sure you want to clear the cart? This action cannot be undone.',
-      confirmText: 'Clear Cart',
-      cancelText: 'Cancel',
-      type: 'warning',
-    });
-
-    if (confirmed) {
-      clearCart();
-      showToast('Cart cleared successfully', 'success');
-    }
-  };
+  const { cart } = useCart();
 
   return (
-    <div className="min-h-screen bg-mesh">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-24 sm:pb-32">
-        <div className="mb-10 sm:mb-14 text-center">
-          <div className="inline-flex items-center justify-center p-3 mb-6 bg-white/50 backdrop-blur-sm rounded-2xl shadow-glass border border-white/50 animate-fade-in">
-            <div className="bg-primary-50 p-2 rounded-xl">
-              <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-            </div>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-primary-800 to-slate-900 animate-gradient">
-              Shopping Cart
-            </span>
-          </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Review your selected items and proceed to checkout
-          </p>
-        </div>
-
-        {showPrintView ? (
-          <BillPreview cartItems={cart} />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
-            <div className="lg:col-span-2 space-y-6 order-2 lg:order-1">
-              {cart.length === 0 ? (
-                <div className="glass-card rounded-3xl p-12 text-center border border-white/50">
-                  <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                    <svg className="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-2xl font-bold text-slate-800 mb-3">Your cart is empty</h3>
-                  <p className="text-slate-500 text-lg mb-8">Looks like you haven&apos;t added any items yet.</p>
-                  <a
-                    href="/"
-                    className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all shadow-lg shadow-primary-500/30 hover:shadow-primary-500/40 hover:-translate-y-1"
-                  >
-                    Start Shopping
-                  </a>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {cart.map((cartItem) => (
-                    <div key={cartItem.item.id} className="glass-card rounded-2xl p-4 sm:p-6 hover-lift border border-white/50 transition-all duration-300">
-                      <CartItem cartItem={cartItem} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="order-1 lg:order-2">
-              <div className="sticky top-24">
-                <div className="glass-card rounded-3xl p-6 sm:p-8 border border-white/50 shadow-glass-lg">
-                  <CartSummary
-                    onPayNow={handlePayNow}
-                    onPrintBill={handlePrintBill}
-                    onClearCart={handleClearCart}
-                  />
-                </div>
+    <>
+      <div className="min-h-screen bg-dark-mesh">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-24 sm:pb-32">
+          {/* Page Header */}
+          <div className="mb-10 sm:mb-14 text-center">
+            <div className="inline-flex items-center justify-center p-3 mb-6 bg-dark-200/60 backdrop-blur-sm rounded-2xl shadow-dark border border-dark-50/30 animate-reveal-up">
+              <div className="bg-accent/10 p-2 rounded-xl">
+                <svg className="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
               </div>
             </div>
+
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4 animate-reveal-up stagger-1">
+              <span className="text-gold-gradient">Shopping Cart</span>
+            </h1>
+            <p className="text-lg text-ivory-muted max-w-2xl mx-auto animate-reveal-up stagger-2">
+              Review your items and proceed to checkout
+            </p>
           </div>
-        )}
+
+          {cart.length === 0 ? (
+            <div className="dark-card-static rounded-3xl p-12 text-center max-w-lg mx-auto animate-reveal-up stagger-3">
+              <div className="w-24 h-24 bg-dark-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-12 h-12 text-ivory-dim" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-ivory mb-2">Your cart is empty</h3>
+              <p className="text-ivory-muted mb-8">
+                Explore our collection and add some premium gear to your cart.
+              </p>
+              <Link
+                href="/"
+                className="btn-accent inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Browse Menu
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
+              <div className="lg:col-span-2 space-y-4">
+                {cart.map((item, index) => (
+                  <div key={item.item.id} className={`animate-reveal-up stagger-${Math.min(index + 1, 8)}`}>
+                    <CartItem item={item} />
+                  </div>
+                ))}
+              </div>
+              <div className="animate-reveal-up stagger-3">
+                <CartSummary />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <FloatingCartButton />
+    </>
   );
 }
