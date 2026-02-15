@@ -47,7 +47,11 @@ export default function ReportsClient({ initialTransactions }: ReportsClientProp
     }, [filteredTransactions]);
 
     const years = useMemo(() => {
-        const yearSet = new Set(initialTransactions.map((t) => new Date(t.date).getFullYear()));
+        const yearSet = new Set(
+            initialTransactions
+                .map((t) => new Date(t.date).getFullYear())
+                .filter((y) => !isNaN(y))
+        );
         yearSet.add(new Date().getFullYear());
         return Array.from(yearSet).sort((a, b) => b - a);
     }, [initialTransactions]);

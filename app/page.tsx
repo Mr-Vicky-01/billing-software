@@ -8,7 +8,8 @@ export const revalidate = 0;
 
 export default async function Home() {
   // Server-side data fetching
-  const items = await getMenuItems();
+  const rawItems = await getMenuItems();
+  const items = JSON.parse(JSON.stringify(rawItems));
 
   return (
     <>

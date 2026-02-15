@@ -7,7 +7,8 @@ export const revalidate = 0;
 
 export default async function ManagePage() {
   // Server-side data fetching
-  const initialItems = await getMenuItems();
+  const rawItems = await getMenuItems();
+  const initialItems = JSON.parse(JSON.stringify(rawItems));
 
   return <ManageClient initialItems={initialItems} />;
 }

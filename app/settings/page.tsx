@@ -5,7 +5,8 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function SettingsPage() {
-  const settings = await getSettings();
+  const rawSettings = await getSettings();
+  const settings = JSON.parse(JSON.stringify(rawSettings));
 
   return (
     <div className="min-h-screen bg-dark-mesh">

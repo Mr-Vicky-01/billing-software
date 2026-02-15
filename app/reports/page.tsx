@@ -7,7 +7,8 @@ export const revalidate = 0;
 
 export default async function ReportsPage() {
   // Server-side data fetching
-  const transactions = await getTransactions();
+  const rawTransactions = await getTransactions();
+  const transactions = JSON.parse(JSON.stringify(rawTransactions));
 
   return <ReportsClient initialTransactions={transactions} />;
 }
