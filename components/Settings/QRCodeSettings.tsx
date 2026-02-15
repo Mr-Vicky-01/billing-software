@@ -2,32 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getSettings, saveSettings } from '@/lib/api';
+import { getQRCode, saveQRCode } from '@/lib/storage';
 import { useToast } from '@/context/ToastContext';
 
-interface QRCodeSettingsProps {
-  initialQRCode?: string;
-}
-
-export default function QRCodeSettings({ initialQRCode }: QRCodeSettingsProps) {
+export default function QRCodeSettings() {
   const { showToast } = useToast();
-  const [qrImage, setQRImage] = useState<string | null>(initialQRCode || null);
+  const [qrImage, setQRImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Fetch QR code from server if not provided as prop
-    if (!initialQRCode) {
-      getSettings()
-        .then((settings) => {
-          if (settings.qrCode) {
-            setQRImage(settings.qrCode);
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching QR code:', error);
-        });
+    const savedQR = getQRCode();
+    if (savedQR) {
+      setQRImage(savedQR);
     }
-  }, [initialQRCode]);
+  }, []);
 
   const handleQRUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -46,33 +34,22 @@ export default function QRCodeSettings({ initialQRCode }: QRCodeSettingsProps) {
 
       setLoading(true);
       const reader = new FileReader();
-      reader.onloadend = async () => {
+      reader.onloadend = () => {
         const result = reader.result as string;
-        try {
-          await saveSettings({ qrCode: result });
-          setQRImage(result);
-          showToast('QR Code updated successfully!', 'success');
-        } catch (error) {
-          console.error('Error saving QR code:', error);
-          showToast('Failed to save QR code', 'error');
-        } finally {
-          setLoading(false);
-        }
+        setQRImage(result);
+        saveQRCode(result);
+        showToast('QR Code updated successfully!', 'success');
+        setLoading(false);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleRemoveQR = async () => {
+  const handleRemoveQR = () => {
     if (confirm('Are you sure you want to remove the QR code?')) {
-      try {
-        await saveSettings({ qrCode: '' });
-        setQRImage(null);
-        showToast('QR Code removed', 'info');
-      } catch (error) {
-        console.error('Error removing QR code:', error);
-        showToast('Failed to remove QR code', 'error');
-      }
+      setQRImage(null);
+      saveQRCode('');
+      showToast('QR Code removed', 'info');
     }
   };
 
